@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Minetest_Project_WebAPI.Dtos
 {
-    public partial class CourseReadDto
+    public class CourseReadDto
     {
         public string CourseId { get; set; }
         public string CourseName { get; set; }

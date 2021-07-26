@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Minetest_Project_WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -25,10 +23,11 @@ namespace Minetest_Project_WebAPI.Controllers
             _context = context;
             _mapper = mapper;
         }
+
         // GET: api/<CourseController>
         [HttpGet]
         //public IEnumerable<CourseReadDto> GetCourses()
-        public ActionResult GetCourse()
+        public ActionResult<CourseReadDto> GetCourse()
         {
             var result = _context.Courses
                 .Include(t => t.Teacher);
@@ -55,7 +54,7 @@ namespace Minetest_Project_WebAPI.Controllers
 
             if (result == null)
             {
-                return NotFound("CourseId not found."); 
+                return NotFound("CourseId: " + id + " not found.");
             }
 
             return Ok(_mapper.Map<CourseReadDto>(result));
@@ -75,7 +74,7 @@ namespace Minetest_Project_WebAPI.Controllers
         [HttpPut("{id}")]
         public ActionResult PutCourse(string id, [FromBody] Course value)
         {
-            if ( id != value.CourseId)
+            if (id != value.CourseId)
             {
                 return BadRequest();
             }
@@ -92,7 +91,7 @@ namespace Minetest_Project_WebAPI.Controllers
                 {
                     return NotFound();
                 }
-                else 
+                else
                 {
                     return StatusCode(500, "Update error");
                 }
