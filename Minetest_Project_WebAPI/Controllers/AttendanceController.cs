@@ -84,5 +84,25 @@ namespace Minetest_Project_WebAPI.Controllers
 
             return Ok();
         }
+
+        // DELETE api/<CourseController>/5
+        [HttpDelete]
+        public ActionResult DeleteAttendance([FromBody] Attendance value)
+        {
+            int del_attendanceId = _context.Attendances
+                .Where(a=> a.CourseId == value.CourseId & a.StudentId == value.StudentId & a.Date == value.Date)
+                .Select(s => s.AttendanceId)
+                .FirstOrDefault();
+
+            var result = _context.Attendances.Find(del_attendanceId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            _context.Attendances.Remove(result);
+            _context.SaveChanges();
+            return NoContent();
+        }
     }
 }

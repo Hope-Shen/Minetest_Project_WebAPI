@@ -25,7 +25,6 @@ namespace Minetest_Project_WebAPI.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,11 +35,13 @@ namespace Minetest_Project_WebAPI.Models
             {
                 entity.ToTable("Attendance");
 
-                entity.Property(e => e.AttendanceId).HasColumnName("AttendanceID");
-
                 entity.Property(e => e.CourseId)
                     .IsRequired()
                     .HasMaxLength(10);
+
+                entity.Property(e => e.Date)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Attendances)
