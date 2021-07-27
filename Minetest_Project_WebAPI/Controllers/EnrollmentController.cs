@@ -34,7 +34,7 @@ namespace Minetest_Project_WebAPI.Controllers
                 new
                 {
                     courseId = g.CourseId + " " + g.Course.CourseName,
-                    studentName = g.Student.StudentName
+                    studentName = g.StudentId + "-" + g.Student.StudentName
                 })
                 .ToList()
                 .GroupBy(

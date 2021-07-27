@@ -26,7 +26,7 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // GET: api/<ValuesController>
         [HttpGet]
-        public ActionResult<AttendanceReadDto> GetCourse()
+        public ActionResult<AttendanceReadDto> GetAttendance()
         {
             var result = _context.Attendances
                 .Include(s => s.Student)
@@ -34,7 +34,7 @@ namespace Minetest_Project_WebAPI.Controllers
                 new
                 {
                     courseId = g.CourseId + " " + g.Course.CourseName,
-                    studentName = g.Student.StudentName
+                    studentName = g.StudentId + "-" + g.Student.StudentName
                 })
                 .ToList()
                 .GroupBy(
@@ -45,6 +45,44 @@ namespace Minetest_Project_WebAPI.Controllers
             if (result == null || result.Count() == 0) return NotFound();
 
             return Ok(_mapper.Map<IEnumerable<AttendanceReadDto>>(result));
+        }
+
+        // GET api/<CourseController>/5
+        [HttpGet("{courseId}")]
+        public ActionResult<AttendanceReadDto> GetAttendanceByCourseId(string courseId)
+        {
+            var result = _context.Attendances
+                .Include(s => s.Student)
+                .Where(c => c.CourseId == courseId)
+                .Select(g =>
+                new
+                {
+                    courseId = g.CourseId + " " + g.Course.CourseName,
+                    studentName = g.StudentId + "-" + g.Student.StudentName
+                })
+                .ToList()
+                .GroupBy(
+                p => p.courseId,
+                p => p.studentName,
+                (key, g) => new AttendanceReadDto { CourseId = key, StudentName = String.Join(",", g.ToArray()) })
+                .SingleOrDefault();
+
+            if (result == null)
+            {
+                return NotFound("CourseId: " + courseId + " not found.");
+            }
+
+            return Ok(_mapper.Map<AttendanceReadDto>(result));
+        }
+
+        // POST api/<CourseController>
+        [HttpPost]
+        public ActionResult<AttendanceReadDto> PostAttendance([FromBody] Attendance value)
+        {
+            _context.Attendances.Add(value);
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }
