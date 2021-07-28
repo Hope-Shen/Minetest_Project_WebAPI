@@ -17,14 +17,13 @@ namespace Minetest_Project_WebAPI.Controllers
         private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
 
-        // GET: api/<TodoController>
         public EnrollmentController(Minetest_DBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/<ValuesController>
+        // GET: api/<EnrollmentController>
         [HttpGet]
         public ActionResult<EnrollmentReadDto> GetCourse()
         {

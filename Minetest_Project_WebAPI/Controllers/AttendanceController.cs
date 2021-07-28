@@ -17,14 +17,13 @@ namespace Minetest_Project_WebAPI.Controllers
         private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
 
-        // GET: api/<TodoController>
         public AttendanceController(Minetest_DBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/<ValuesController>
+        // GET: api/<AttendanceController>
         [HttpGet]
         public ActionResult<AttendanceReadDto> GetAttendance()
         {
@@ -47,7 +46,7 @@ namespace Minetest_Project_WebAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<AttendanceReadDto>>(result));
         }
 
-        // GET api/<CourseController>/5
+        // GET api/<AttendanceController>/5
         [HttpGet("{courseId}")]
         public ActionResult<AttendanceReadDto> GetAttendanceByCourseId(string courseId)
         {
@@ -75,7 +74,7 @@ namespace Minetest_Project_WebAPI.Controllers
             return Ok(_mapper.Map<AttendanceReadDto>(result));
         }
 
-        // POST api/<CourseController>
+        // POST api/<AttendanceController>
         [HttpPost]
         public ActionResult<AttendanceReadDto> PostAttendance([FromBody] Attendance value)
         {
@@ -85,7 +84,7 @@ namespace Minetest_Project_WebAPI.Controllers
             return Ok();
         }
 
-        // DELETE api/<CourseController>/5
+        // DELETE api/<AttendanceController>/5
         [HttpDelete]
         public ActionResult DeleteAttendance([FromBody] Attendance value)
         {

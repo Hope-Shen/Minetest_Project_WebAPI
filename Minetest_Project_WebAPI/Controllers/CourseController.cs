@@ -17,7 +17,6 @@ namespace Minetest_Project_WebAPI.Controllers
         private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
 
-        // GET: api/<TodoController>
         public CourseController(Minetest_DBContext context, IMapper mapper)
         {
             _context = context;
@@ -26,7 +25,6 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // GET: api/<CourseController>
         [HttpGet]
-        //public IEnumerable<CourseReadDto> GetCourses()
         public ActionResult<CourseReadDto> GetCourse()
         {
             var result = _context.Courses
@@ -44,17 +42,17 @@ namespace Minetest_Project_WebAPI.Controllers
         }
 
         // GET api/<CourseController>/5
-        [HttpGet("{id}")]
-        public ActionResult<CourseReadDto> GetCourseById(string id)
+        [HttpGet("{courseId}")]
+        public ActionResult<CourseReadDto> GetCourseById(string courseId)
         {
             var result = _context.Courses
                 .Include(t => t.Teacher)
-                .Where(c => c.CourseId == id)
+                .Where(c => c.CourseId == courseId)
                 .SingleOrDefault();
 
             if (result == null)
             {
-                return NotFound("CourseId: " + id + " not found.");
+                return NotFound("CourseId: " + courseId + " not found.");
             }
 
             return Ok(_mapper.Map<CourseReadDto>(result));
@@ -71,10 +69,10 @@ namespace Minetest_Project_WebAPI.Controllers
         }
 
         // PUT api/<CourseController>/5
-        [HttpPut("{id}")]
-        public ActionResult PutCourse(string id, [FromBody] Course value)
+        [HttpPut("{courseId}")]
+        public ActionResult PutCourse(string courseId, [FromBody] Course value)
         {
-            if (id != value.CourseId)
+            if (courseId != value.CourseId)
             {
                 return BadRequest();
             }
@@ -87,7 +85,7 @@ namespace Minetest_Project_WebAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (!_context.Courses.Any(e => e.CourseId == id))
+                if (!_context.Courses.Any(e => e.CourseId == courseId))
                 {
                     return NotFound();
                 }
@@ -100,10 +98,10 @@ namespace Minetest_Project_WebAPI.Controllers
         }
 
         // DELETE api/<CourseController>/5
-        [HttpDelete("{id}")]
-        public ActionResult DeleteCourse(string id)
+        [HttpDelete("{courseId}")]
+        public ActionResult DeleteCourse(string courseId)
         {
-            var result = _context.Courses.Find(id);
+            var result = _context.Courses.Find(courseId);
             if (result == null)
             {
                 return NotFound();
