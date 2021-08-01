@@ -27,14 +27,16 @@ namespace Minetest_Project_WebAPI.Controllers
         [HttpGet]
         public ActionResult<AttendanceReadDto> GetAttendance()
         {
-            var result = _context.Attendances
-                .Include(s => s.Student)
-                .Select(g =>
-                new
-                {
-                    courseId = g.CourseId + " " + g.Course.CourseName,
-                    studentName = g.StudentId + "-" + g.Student.StudentName
-                })
+            var result =
+                (from e in _context.Courses
+                 join d in _context.Attendances
+                 on e.CourseId equals d.CourseId into empDept
+                 from ed in empDept.DefaultIfEmpty()
+                 select new
+                 {
+                     courseId = e.CourseId + ' ' + ed.Course.CourseName,
+                     studentName = ed == null ? "" : ed.StudentId + "-" + ed.Student.StudentName
+                 })
                 .ToList()
                 .GroupBy(
                 p => p.courseId,
@@ -89,7 +91,7 @@ namespace Minetest_Project_WebAPI.Controllers
         public ActionResult DeleteAttendance([FromBody] Attendance value)
         {
             int del_attendanceId = _context.Attendances
-                .Where(a=> a.CourseId == value.CourseId & a.StudentId == value.StudentId & a.Date == value.Date)
+                .Where(a => a.CourseId == value.CourseId & a.StudentId == value.StudentId & a.Date == value.Date)
                 .Select(s => s.AttendanceId)
                 .FirstOrDefault();
 
