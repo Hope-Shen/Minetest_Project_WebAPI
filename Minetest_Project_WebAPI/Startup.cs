@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Minetest_Project_WebAPI.Models;
+using Minetest_Project_WebAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace Minetest_Project_WebAPI
             services.AddDbContext<Minetest_DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<ICourseService, CourseService>();
 
             services.AddSwaggerGen(c =>
             {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Minetest_Project_WebAPI.Dtos;
 using Minetest_Project_WebAPI.Models;
+using Minetest_Project_WebAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,58 +15,48 @@ namespace Minetest_Project_WebAPI.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
+        private readonly ICourseService _courseService;
 
-        public CourseController(Minetest_DBContext context, IMapper mapper)
+        public CourseController(ICourseService courseService, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
+            _courseService = courseService;
         }
 
         // GET: api/<CourseController>
         [HttpGet]
-        public ActionResult<CourseReadDto> GetCourse()
+        public ActionResult GetCourse()
         {
-            var result = _context.Courses
-                .Include(t => t.Teacher);
-            //.Select(a => new CourseReadDto
-            //{
-            //    CourseId = a.CourseId,
-            //    CourseName = a.CourseName,
-            //    TeacherId = a.TeacherId,
-            //    TeacherName = a.Teacher.TeacherName
-            //});
+            var result = _courseService.GetCourse();
             if (result == null || result.Count() == 0) return NotFound();
-
-            return Ok(_mapper.Map<IEnumerable<CourseReadDto>>(result));
+            return Ok(result);
         }
 
         // GET api/<CourseController>/5
         [HttpGet("{courseId}")]
-        public ActionResult<CourseReadDto> GetCourseById(string courseId)
+        public ActionResult GetCourseById(string courseId)
         {
-            var result = _context.Courses
-                .Include(t => t.Teacher)
-                .Where(c => c.CourseId == courseId)
-                .SingleOrDefault();
+            var result = _courseService.GetCourseById(courseId);
+            if (result == null) return NotFound("CourseId: " + courseId + " not found.");
 
-            if (result == null)
-            {
-                return NotFound("CourseId: " + courseId + " not found.");
-            }
-
-            return Ok(_mapper.Map<CourseReadDto>(result));
+            return Ok(result);
         }
 
         // POST api/<CourseController>
         [HttpPost]
         public ActionResult<Course> PostCourse([FromBody] Course value)
         {
-            _context.Courses.Add(value);
-            _context.SaveChanges();
+            try
+            {
+                _courseService.PostCourse(value);
+            }
+            catch
+            {
+                return StatusCode(500, "insert error");
+            }
 
-            return CreatedAtAction(nameof(GetCourseById), new { id = value.CourseId }, value);
+            return Ok();
         }
 
         // PUT api/<CourseController>/5
@@ -77,22 +68,16 @@ namespace Minetest_Project_WebAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(value).State = EntityState.Modified;
-
             try
             {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (!_context.Courses.Any(e => e.CourseId == courseId))
+                if(_courseService.PutCourse(courseId, value) == 0) 
                 {
                     return NotFound();
                 }
-                else
-                {
-                    return StatusCode(500, "Update error");
-                }
+            }
+            catch
+            {
+                return StatusCode(500, "Update error");
             }
             return NoContent();
         }
@@ -101,14 +86,10 @@ namespace Minetest_Project_WebAPI.Controllers
         [HttpDelete("{courseId}")]
         public ActionResult DeleteCourse(string courseId)
         {
-            var result = _context.Courses.Find(courseId);
-            if (result == null)
+            if (_courseService.DeleteCourse(courseId) == 0)
             {
                 return NotFound();
             }
-
-            _context.Courses.Remove(result);
-            _context.SaveChanges();
             return NoContent();
         }
     }
