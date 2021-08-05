@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Minetest_Project_WebAPI.Dtos;
 using Minetest_Project_WebAPI.Models;
+using Minetest_Project_WebAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,36 +15,22 @@ namespace Minetest_Project_WebAPI.Controllers
     [ApiController]
     public class EnrollmentController : ControllerBase
     {
-        private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
+        private readonly IEnrollmentService _enrollmentService;
 
-        public EnrollmentController(Minetest_DBContext context, IMapper mapper)
+        public EnrollmentController(IEnrollmentService enrollmentService, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
+            _enrollmentService = enrollmentService;
         }
 
         // GET: api/<EnrollmentController>
         [HttpGet]
-        public ActionResult<EnrollmentReadDto> GetCourse()
+        public ActionResult GetCourse()
         {
-            var result = _context.Enrollments
-                .Include(s => s.Student)
-                .Select(g =>
-                new
-                {
-                    courseId = g.CourseId + " " + g.Course.CourseName,
-                    studentName = g.StudentId + "-" + g.Student.StudentName
-                })
-                .ToList()
-                .GroupBy(
-                p => p.courseId,
-                p => p.studentName,
-                (key, g) => new EnrollmentReadDto { CourseId = key, StudentName = String.Join(",", g.ToArray()) });
-
+            var result = _enrollmentService.GetEnrollment();
             if (result == null || result.Count() == 0) return NotFound();
-
-            return Ok(_mapper.Map<IEnumerable<EnrollmentReadDto>>(result));
+            return Ok(result);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Minetest_Project_WebAPI.Dtos;
 using Minetest_Project_WebAPI.Models;
+using Minetest_Project_WebAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +15,22 @@ namespace Minetest_Project_WebAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
+        private readonly IStudentService _studentService;
 
-        // GET: api/<StudentController>
-        public StudentController(Minetest_DBContext context, IMapper mapper)
+        public StudentController(IStudentService studentService, IMapper mapper)
         {
-            _context = context;
             _mapper = mapper;
+            _studentService = studentService;
         }
 
         // GET: api/<StudentController>
         [HttpGet]
         public ActionResult<StudentReadDto> GetStudent()
         {
-            var result = _context.Students;
+            var result = _studentService.GetStudent();
             if (result == null || result.Count() == 0) return NotFound();
-
-            return Ok(_mapper.Map<IEnumerable<StudentReadDto>>(result));
+            return Ok(result);
         }
     }
 }

@@ -36,6 +36,9 @@ namespace Minetest_Project_WebAPI
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
+            services.AddScoped<IAttendanceService, AttendanceService>();
 
             services.AddSwaggerGen(c =>
             {

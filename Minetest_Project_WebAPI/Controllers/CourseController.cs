@@ -39,7 +39,6 @@ namespace Minetest_Project_WebAPI.Controllers
         {
             var result = _courseService.GetCourseById(courseId);
             if (result == null) return NotFound("CourseId: " + courseId + " not found.");
-
             return Ok(result);
         }
 
@@ -53,7 +52,7 @@ namespace Minetest_Project_WebAPI.Controllers
             }
             catch
             {
-                return StatusCode(500, "insert error");
+                return StatusCode(500, "Insert course error");
             }
 
             return Ok();
@@ -70,14 +69,14 @@ namespace Minetest_Project_WebAPI.Controllers
 
             try
             {
-                if(_courseService.PutCourse(courseId, value) == 0) 
+                if (_courseService.PutCourse(courseId, value) == 0)
                 {
                     return NotFound();
                 }
             }
             catch
             {
-                return StatusCode(500, "Update error");
+                return StatusCode(500, "Update course error");
             }
             return NoContent();
         }

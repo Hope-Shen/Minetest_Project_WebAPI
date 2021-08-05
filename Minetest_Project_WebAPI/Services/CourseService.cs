@@ -57,7 +57,6 @@ namespace Minetest_Project_WebAPI.Services
             {
                 _context.Courses.Remove(result);
             }
-            
             return _context.SaveChanges();
         }
     }
