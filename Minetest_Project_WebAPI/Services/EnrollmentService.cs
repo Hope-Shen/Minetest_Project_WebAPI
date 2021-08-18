@@ -38,6 +38,5 @@ namespace Minetest_Project_WebAPI.Services
 
             return _mapper.Map<IEnumerable<EnrollmentReadDto>>(result);
         }
-
     }
 }

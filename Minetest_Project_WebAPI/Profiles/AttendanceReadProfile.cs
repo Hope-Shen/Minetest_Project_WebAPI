@@ -9,15 +9,10 @@ namespace Minetest_Project_WebAPI.Profiles
         public AttendanceReadProfile()
         {
             CreateMap<Attendance, AttendanceReadDto>()
-                //.ForMember(
-                //c => c.CourseName,
-                //s => s.MapFrom(c => c.Course.CourseName)
-                //)
                 .ForMember(
-                s => s.StudentName, 
-                s => s.MapFrom(c => c.Student.StudentName)
+                    s => s.StudentName, 
+                    s => s.MapFrom(c => c.Student.StudentName)
                 );
         }
-
     }
 }

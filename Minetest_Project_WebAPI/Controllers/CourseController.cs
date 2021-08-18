@@ -44,11 +44,14 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // POST api/<CourseController>
         [HttpPost]
-        public ActionResult<Course> PostCourse([FromBody] Course value)
+        public ActionResult PostCourse([FromBody] Course value)
         {
             try
             {
-                _courseService.PostCourse(value);
+                if (_courseService.PostCourse(value) == 0)
+                {
+                    return BadRequest();
+                }
             }
             catch
             {

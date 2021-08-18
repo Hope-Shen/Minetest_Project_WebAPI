@@ -38,10 +38,14 @@ namespace Minetest_Project_WebAPI.Services
             return _mapper.Map<CourseReadDto>(result);
         }
 
-        public void PostCourse(Course value)
+        public int PostCourse(Course value)
         {
+            if (string.IsNullOrEmpty(value.CourseId) || string.IsNullOrEmpty(value.CourseName)) 
+            {
+                return 0;
+            }
             _context.Courses.Add(value);
-            _context.SaveChanges();
+            return _context.SaveChanges();
         }
 
         public int PutCourse(string courseId, Course value)

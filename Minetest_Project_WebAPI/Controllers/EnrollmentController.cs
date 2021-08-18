@@ -26,7 +26,7 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // GET: api/<EnrollmentController>
         [HttpGet]
-        public ActionResult GetCourse()
+        public ActionResult GetEnrollment()
         {
             var result = _enrollmentService.GetEnrollment();
             if (result == null || result.Count() == 0) return NotFound();

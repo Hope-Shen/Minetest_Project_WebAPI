@@ -11,7 +11,7 @@ namespace Minetest_Project_WebAPI.Services
     {
         IEnumerable<CourseReadDto> GetCourse();
         CourseReadDto GetCourseById(string courseId);
-        void PostCourse(Course value);
+        int PostCourse(Course value);
         int PutCourse(string courseId, Course value);
         int DeleteCourse(string courseId);
     }

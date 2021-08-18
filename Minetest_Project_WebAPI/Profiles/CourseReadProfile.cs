@@ -10,10 +10,9 @@ namespace Minetest_Project_WebAPI.Profiles
         {
             CreateMap<Course, CourseReadDto>()
                 .ForMember(
-                t => t.TeacherName,
-                s => s.MapFrom(c => c.Teacher.TeacherName)
+                    t => t.TeacherName,
+                    s => s.MapFrom(c => c.Teacher.TeacherName)
                 );
         }
-        
     }
 }

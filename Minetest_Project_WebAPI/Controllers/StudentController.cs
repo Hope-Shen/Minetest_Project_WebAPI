@@ -26,7 +26,7 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // GET: api/<StudentController>
         [HttpGet]
-        public ActionResult<StudentReadDto> GetStudent()
+        public ActionResult GetStudent()
         {
             var result = _studentService.GetStudent();
             if (result == null || result.Count() == 0) return NotFound();

@@ -10,6 +10,5 @@ namespace Minetest_Project_WebAPI.Profiles
         {
             CreateMap<Student, StudentReadDto>();
         }
-        
     }
 }

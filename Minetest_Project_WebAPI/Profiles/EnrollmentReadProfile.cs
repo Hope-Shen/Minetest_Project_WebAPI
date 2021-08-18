@@ -9,15 +9,10 @@ namespace Minetest_Project_WebAPI.Profiles
         public EnrollmentReadProfile()
         {
             CreateMap<Enrollment, EnrollmentReadDto>()
-                //.ForMember(
-                //c => c.CourseName,
-                //s => s.MapFrom(c => c.Course.CourseName)
-                //)
                 .ForMember(
-                s => s.StudentName,
-                s => s.MapFrom(c => c.Student.StudentName)
+                    s => s.StudentName,
+                    s => s.MapFrom(c => c.Student.StudentName)
                 );
         }
-        
     }
 }
