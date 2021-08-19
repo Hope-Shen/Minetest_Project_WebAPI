@@ -32,5 +32,31 @@ namespace Minetest_Project_WebAPI.Controllers
             if (result == null || result.Count() == 0) return NotFound();
             return Ok(result);
         }
+
+        // POST api/<EnrollmentController>
+        [HttpPost]
+        public ActionResult<EnrollmentReadDto> PostEnrollment([FromBody] Enrollment value)
+        {
+            try
+            {
+                _enrollmentService.PostEnrollment(value);
+            }
+            catch
+            {
+                return StatusCode(500, "Insert enrollment error");
+            }
+            return Ok();
+        }
+
+        // DELETE api/<EnrollmentController>/5
+        [HttpDelete]
+        public ActionResult DeleteEnrollment([FromBody] Enrollment value)
+        {
+            if (_enrollmentService.DeleteEnrollment(value) == 0)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }

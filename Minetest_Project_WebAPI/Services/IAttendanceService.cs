@@ -2,8 +2,6 @@
 using Minetest_Project_WebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Minetest_Project_WebAPI.Services
 {
@@ -11,7 +9,7 @@ namespace Minetest_Project_WebAPI.Services
     {
         IEnumerable<AttendanceReadDto> GetAttendance();
         AttendanceReadDto GetAttendanceByCourseId(string courseId);
-        void PostAttendance(Attendance value);
+        int PostAttendance(Attendance value);
         int DeleteAttendance(Attendance value);
     }
 }

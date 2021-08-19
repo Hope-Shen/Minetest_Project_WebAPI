@@ -62,10 +62,14 @@ namespace Minetest_Project_WebAPI.Services
             return _mapper.Map<AttendanceReadDto>(result);
         }
 
-        public void PostAttendance(Attendance value)
+        public int PostAttendance(Attendance value)
         {
+            if (string.IsNullOrEmpty(value.CourseId) || string.IsNullOrEmpty(value.Date.ToString()))
+            {
+                return 0;
+            }
             _context.Attendances.Add(value);
-            _context.SaveChanges();
+            return _context.SaveChanges();
         }
 
         public int DeleteAttendance(Attendance value)

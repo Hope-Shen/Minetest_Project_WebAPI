@@ -37,6 +37,7 @@ namespace Minetest_Project_WebAPI
 
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
             services.AddScoped<IAttendanceService, AttendanceService>();
 

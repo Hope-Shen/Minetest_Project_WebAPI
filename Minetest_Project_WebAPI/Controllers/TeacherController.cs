@@ -13,50 +13,51 @@ namespace Minetest_Project_WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class TeacherController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IStudentService _studentService;
+        private readonly ITeacherService _teacherService;
 
-        public StudentController(IStudentService studentService, IMapper mapper)
+        public TeacherController(ITeacherService teacherService, IMapper mapper)
         {
             _mapper = mapper;
-            _studentService = studentService;
+            _teacherService = teacherService;
         }
 
-        // GET: api/<StudentController>
+        // GET: api/<TeacherController>
         [HttpGet]
-        public ActionResult GetStudent()
+        public ActionResult GetTeacher()
         {
-            var result = _studentService.GetStudent();
+            var result = _teacherService.GetTeacher();
             if (result == null || result.Count() == 0) return NotFound();
             return Ok(result);
         }
 
-        // POST api/<StudentController>
+        // POST api/<TeacherController>
         [HttpPost]
-        public ActionResult PostStudent([FromBody] Student value)
+        public ActionResult PostTeacher([FromBody] Teacher value)
         {
             try
             {
-                if (_studentService.PostStudent(value) == 0)
+                if (_teacherService.PostTeacher(value) == 0)
                 {
                     return BadRequest();
                 }
             }
             catch
             {
-                return StatusCode(500, "Insert student error");
+                return StatusCode(500, "Insert teacher error");
             }
 
-            return Ok(new { StudentId = value.StudentId, StudentName = value.StudentName });
+            return Ok(new { TeacherId = value.TeacherId, TeacherName = value.TeacherName });
         }
 
-        // DELETE api/<StudentController>/5
-        [HttpDelete("{studentId}")]
-        public ActionResult DeleteStudent(int studentId)
+
+        // DELETE api/<TeacherController>/5
+        [HttpDelete("{teacherId}")]
+        public ActionResult DeleteTeacher(int teacherId)
         {
-            if (_studentService.DeleteStudent(studentId) == 0)
+            if (_teacherService.DeleteTeacher(teacherId) == 0)
             {
                 return NotFound();
             }

@@ -58,7 +58,7 @@ namespace Minetest_Project_WebAPI.Controllers
                 return StatusCode(500, "Insert course error");
             }
 
-            return Ok();
+            return Ok(new { CourseId = value.CourseId, CourseName = value.CourseName });
         }
 
         // PUT api/<CourseController>/5

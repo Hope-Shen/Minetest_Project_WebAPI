@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace Minetest_Project_WebAPI.Services
 {
-    public interface IStudentService
+    public interface ITeacherService
     {
-        IEnumerable<StudentReadDto> GetStudent();
-        int PostStudent(Student value);
-        int DeleteStudent(int studentId);
+        IEnumerable<TeacherReadDto> GetTeacher();
+        int PostTeacher(Teacher value);
+        int DeleteTeacher(int teacherId);
     }
 }

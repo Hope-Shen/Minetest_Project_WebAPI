@@ -40,7 +40,7 @@ namespace Minetest_Project_WebAPI.Services
 
         public int PostCourse(Course value)
         {
-            if (string.IsNullOrEmpty(value.CourseId) || string.IsNullOrEmpty(value.CourseName)) 
+            if (string.IsNullOrEmpty(value.CourseId) || string.IsNullOrEmpty(value.CourseName))
             {
                 return 0;
             }

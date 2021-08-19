@@ -9,40 +9,40 @@ using System.Threading.Tasks;
 
 namespace Minetest_Project_WebAPI.Services
 {
-    public class StudentService : IStudentService
+    public class TeacherService : ITeacherService
     {
         private readonly Minetest_DBContext _context;
         private readonly IMapper _mapper;
 
-        public StudentService(Minetest_DBContext context, IMapper mapper)
+        public TeacherService(Minetest_DBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public IEnumerable<StudentReadDto> GetStudent()
+        public IEnumerable<TeacherReadDto> GetTeacher()
         {
-            var result = _context.Students;
-            return _mapper.Map<IEnumerable<StudentReadDto>>(result);
+            var result = _context.Teachers;
+            return _mapper.Map<IEnumerable<TeacherReadDto>>(result);
         }
 
-        public int PostStudent(Student value)
+        public int PostTeacher(Teacher value)
         {
-            if (string.IsNullOrEmpty(value.StudentName))
+            if (string.IsNullOrEmpty(value.TeacherName))
             {
                 return 0;
             }
 
-            _context.Students.Add(value);
+            _context.Teachers.Add(value);
             return _context.SaveChanges();
         }
 
-        public int DeleteStudent(int studentId)
+        public int DeleteTeacher(int teacherId)
         {
-            var result = _context.Students.Find(studentId);
+            var result = _context.Teachers.Find(teacherId);
             if (result != null)
             {
-                _context.Students.Remove(result);
+                _context.Teachers.Remove(result);
             }
             return _context.SaveChanges();
         }
