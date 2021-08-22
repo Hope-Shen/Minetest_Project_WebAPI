@@ -49,17 +49,21 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // POST api/<AttendanceController>
         [HttpPost]
-        public ActionResult<AttendanceReadDto> PostAttendance([FromBody] Attendance value)
+        public ActionResult PostAttendance([FromBody] Attendance value)
         {
             try
             {
-                _attendanceService.PostAttendance(value);
+                if (_attendanceService.PostAttendance(value) == 0)
+                {
+                    return BadRequest();
+                }
             }
             catch
             {
                 return StatusCode(500, "Insert attendance error");
             }
-            return Ok();
+
+            return Ok(new { AttendanceId = value.AttendanceId, CourseId = value.CourseId, StudentId = value.StudentId, Date = value.Date });
         }
 
         // DELETE api/<AttendanceController>/5

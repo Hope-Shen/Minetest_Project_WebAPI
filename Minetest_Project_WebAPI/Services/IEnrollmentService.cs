@@ -9,6 +9,6 @@ namespace Minetest_Project_WebAPI.Services
     {
         IEnumerable<EnrollmentReadDto> GetEnrollment();
         int PostEnrollment(Enrollment value);
-        int DeleteEnrollment(Enrollment value);
+        int DeleteEnrollment(int enrollmentId);
     }
 }

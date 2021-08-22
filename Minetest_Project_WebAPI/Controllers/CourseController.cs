@@ -58,7 +58,7 @@ namespace Minetest_Project_WebAPI.Controllers
                 return StatusCode(500, "Insert course error");
             }
 
-            return Ok(new { CourseId = value.CourseId, CourseName = value.CourseName });
+            return Ok(new { CourseId = value.CourseId, CourseName = value.CourseName, TeacherId = value.TeacherId });
         }
 
         // PUT api/<CourseController>/5
@@ -81,7 +81,7 @@ namespace Minetest_Project_WebAPI.Controllers
             {
                 return StatusCode(500, "Update course error");
             }
-            return NoContent();
+            return Ok(new { CourseId = value.CourseId, CourseName = value.CourseName, TeacherId = value.TeacherId });
         }
 
         // DELETE api/<CourseController>/5

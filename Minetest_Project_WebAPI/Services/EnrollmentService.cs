@@ -50,15 +50,9 @@ namespace Minetest_Project_WebAPI.Services
             return _context.SaveChanges();
         }
 
-        public int DeleteEnrollment(Enrollment value)
+        public int DeleteEnrollment(int enrollmentId)
         {
-            int del_enrollmentId = _context.Enrollments
-                .Where(a => a.CourseId == value.CourseId & a.StudentId == value.StudentId)
-                .Select(s => s.EnrollmentId)
-                .FirstOrDefault();
-
-            var result = _context.Enrollments.Find(del_enrollmentId);
-
+            var result = _context.Enrollments.Find(enrollmentId);
             if (result != null)
             {
                 _context.Enrollments.Remove(result);

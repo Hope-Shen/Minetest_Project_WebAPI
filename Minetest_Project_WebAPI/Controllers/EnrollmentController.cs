@@ -35,24 +35,28 @@ namespace Minetest_Project_WebAPI.Controllers
 
         // POST api/<EnrollmentController>
         [HttpPost]
-        public ActionResult<EnrollmentReadDto> PostEnrollment([FromBody] Enrollment value)
+        public ActionResult PostEnrollment([FromBody] Enrollment value)
         {
             try
             {
-                _enrollmentService.PostEnrollment(value);
+                if (_enrollmentService.PostEnrollment(value) == 0)
+                {
+                    return BadRequest();
+                }
             }
             catch
             {
                 return StatusCode(500, "Insert enrollment error");
             }
-            return Ok();
+
+            return Ok(new { EnrollmentId = value.EnrollmentId, CourseId = value.CourseId, StudentId = value.StudentId });
         }
 
         // DELETE api/<EnrollmentController>/5
-        [HttpDelete]
-        public ActionResult DeleteEnrollment([FromBody] Enrollment value)
+        [HttpDelete("{enrollmentId}")]
+        public ActionResult DeleteEnrollment(int enrollmentId)
         {
-            if (_enrollmentService.DeleteEnrollment(value) == 0)
+            if (_enrollmentService.DeleteEnrollment(enrollmentId) == 0)
             {
                 return NotFound();
             }
