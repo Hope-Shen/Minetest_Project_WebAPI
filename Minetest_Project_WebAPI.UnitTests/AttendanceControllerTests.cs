@@ -7,6 +7,8 @@ using Minetest_Project_WebAPI.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Minetest_Project_WebAPI.Services;
+using FluentAssertions;
+using Minetest_Project_WebAPI.Models;
 
 namespace Minetest_Project_WebAPI.UnitTests
 {
@@ -56,6 +58,68 @@ namespace Minetest_Project_WebAPI.UnitTests
             //Assert
             var expected = new NotFoundObjectResult(new List<AttendanceReadDto>());
             Assert.Equal(expected.StatusCode, actual.StatusCode);
+        }
+
+        [Fact]
+        public void PostAttendance_WithAttendanceCreate_ReturnOk()
+        {
+            // Arrange
+            var createAttendance = new Attendance()
+            { CourseId = "COMP0097", StudentId = 1, Date = DateTime.Today };
+            _attendanceService.Setup(repo => repo.PostAttendance(It.IsAny<Attendance>())).Returns(1);
+            var controller = new AttendanceController(_attendanceService.Object, _mapper.Object);
+
+            // Act
+            ActionResult result = controller.PostAttendance(createAttendance);
+
+            //Assert
+            result.Should().BeOfType<OkObjectResult>();
+        }
+
+        [Fact]
+        public void PostAttendance_WithOutAttendanceCreate_ReturnBadRequest()
+        {
+            // Arrange
+            _attendanceService.Setup(repo => repo.PostAttendance(It.IsAny<Attendance>())).Returns(0);
+            var controller = new AttendanceController(_attendanceService.Object, _mapper.Object);
+
+            // Act
+            ActionResult result = controller.PostAttendance(It.IsAny<Attendance>());
+
+            //Assert
+            result.Should().BeOfType<BadRequestResult>();
+        }
+
+        [Fact]
+        public void DeleteAttendance_WithExistingAttendance_ReturnNoContent()
+        {
+            // Arrange
+            var existingEnrollment = new Attendance()
+            { CourseId = "COMP0097", StudentId = 1, Date = DateTime.Today };
+            _attendanceService.Setup(repo => repo.DeleteAttendance(existingEnrollment)).Returns(1);
+            var controller = new AttendanceController(_attendanceService.Object, _mapper.Object);
+
+            // Act
+            ActionResult result = controller.DeleteAttendance(existingEnrollment);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public void DeleteAttendance_WithOutExistingAttendance_ReturnNotFound()
+        {
+            // Arrange
+            var existingEnrollment = new Attendance()
+            { CourseId = "COMP0097", StudentId = 1, Date = DateTime.Today };
+            _attendanceService.Setup(repo => repo.DeleteAttendance(existingEnrollment)).Returns(0);
+            var controller = new AttendanceController(_attendanceService.Object, _mapper.Object);
+
+            // Act
+            ActionResult result = controller.DeleteAttendance(It.IsAny<Attendance>());
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
         }
     }
 }
