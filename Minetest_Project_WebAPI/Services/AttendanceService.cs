@@ -27,6 +27,7 @@ namespace Minetest_Project_WebAPI.Services
                  join d in _context.Attendances
                  on e.CourseId equals d.CourseId into empDept
                  from ed in empDept.DefaultIfEmpty()
+                 where ed.Date == DateTime.UtcNow.Date
                  select new
                  {
                      courseId = e.CourseId + ' ' + ed.Course.CourseName,
@@ -46,6 +47,7 @@ namespace Minetest_Project_WebAPI.Services
             var result = _context.Attendances
                 .Include(s => s.Student)
                 .Where(c => c.CourseId == courseId)
+                .Where(d=> d.Date == DateTime.UtcNow.Date)
                 .Select(g =>
                 new
                 {
