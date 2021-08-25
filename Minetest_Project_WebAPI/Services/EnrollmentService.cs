@@ -22,14 +22,16 @@ namespace Minetest_Project_WebAPI.Services
 
         public IEnumerable<EnrollmentReadDto> GetEnrollment()
         {
-            var result = _context.Enrollments
-                .Include(s => s.Student)
-                .Select(g =>
-                new
-                {
-                    courseId = g.CourseId + " " + g.Course.CourseName,
-                    studentName = g.StudentId + "-" + g.Student.StudentName
-                })
+            var result =
+                (from c in _context.Courses
+                 join d in _context.Enrollments
+                 on c.CourseId equals d.CourseId into empDept
+                 from ed in empDept.DefaultIfEmpty()
+                 select new
+                 {
+                     courseId = c.CourseId + ' ' + c.CourseName,
+                     studentName = ed == null ? "" : ed.StudentId + "-" + ed.Student.StudentName
+                 })
                 .ToList()
                 .GroupBy(
                 p => p.courseId,

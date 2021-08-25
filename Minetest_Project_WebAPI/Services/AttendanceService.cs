@@ -22,15 +22,17 @@ namespace Minetest_Project_WebAPI.Services
 
         public IEnumerable<AttendanceReadDto> GetAttendance()
         {
+            var attendances_today = _context.Attendances
+                .Where(d => d.Date == DateTime.Now.Date);
+
             var result =
                 (from e in _context.Courses
-                 join d in _context.Attendances
+                 join d in attendances_today
                  on e.CourseId equals d.CourseId into empDept
                  from ed in empDept.DefaultIfEmpty()
-                 where ed.Date == DateTime.UtcNow.Date
                  select new
                  {
-                     courseId = e.CourseId + ' ' + ed.Course.CourseName,
+                     courseId = e.CourseId + ' ' + e.CourseName,
                      studentName = ed == null ? "" : ed.StudentId + "-" + ed.Student.StudentName
                  })
                 .ToList()
